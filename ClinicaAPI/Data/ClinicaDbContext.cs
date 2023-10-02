@@ -7,6 +7,8 @@ namespace ClinicaAPI.Data {
         public DbSet<Medico>? Medico {  get; set; }
         public DbSet<Paciente>? Paciente { get; set; }
         public DbSet<Consulta>? Consulta { get; set; }
+        public DbSet<Receita>? Receita {get; set;}
+        public DbSet<Exame>? Exame {get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 
