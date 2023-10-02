@@ -9,6 +9,7 @@ namespace ClinicaAPI.Data {
         public DbSet<Consulta>? Consulta { get; set; }
         public DbSet<Receita>? Receita {get; set;}
         public DbSet<Exame>? Exame {get; set;}
+        public DbSet<Prontuario>? Prontuario {get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 
