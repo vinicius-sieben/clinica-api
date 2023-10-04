@@ -22,7 +22,10 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult<IEnumerable<Receita>>> Listar()
         {
             if (_context is null) return NotFound();
-            return await _context.Receita.ToListAsync();
+
+            var receitas = await _context.Receita.Include(receita => receita.Medico).ToListAsync();
+
+            return Ok(receitas);
         }
 
         // Cadastrando uma receita
@@ -31,6 +34,12 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult> Cadastrar(Receita receita)
         {
             if (_context is null) return NotFound();
+
+            var existingMedico = await _context.Medico.FindAsync(receita.IdMedico);
+
+            if (existingMedico is null) return BadRequest("Médico não encontrado.");
+            receita.Medico = existingMedico;
+
             await _context.AddAsync(receita);
             await _context.SaveChangesAsync();
             return Created("", receita);

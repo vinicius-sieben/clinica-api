@@ -22,7 +22,10 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult<IEnumerable<Prontuario>>> Listar()
         {
             if (_context is null) return NotFound();
-            return await _context.Prontuario.ToListAsync();
+
+            var prontuarios = await _context.Prontuario.Include(prontuario => prontuario.Paciente).ToListAsync();
+
+            return Ok(prontuarios);
         }
 
         // Cadastrando um prontuario
@@ -31,6 +34,12 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult> Cadastrar(Prontuario prontuario)
         {
             if (_context is null) return NotFound();
+
+            var existingPaciente = await _context.Paciente.FindAsync(prontuario.PacienteId);
+
+            if (existingPaciente is null) return BadRequest("Paciente não encontrado.");
+
+            prontuario.Paciente = existingPaciente;
             await _context.AddAsync(prontuario);
             await _context.SaveChangesAsync();
             return Created("", prontuario);

@@ -1,13 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicaAPI.Models {
     public class Paciente {
         [Key]
-        public int? Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         [Required]
-        public string? Name { get; set; }
+        public string? Nome { get; set; }
         [Required]
         public string? Cpf { get; set; }
-
     }
+
 }

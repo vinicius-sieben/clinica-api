@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaAPI.Migrations
 {
     [DbContext(typeof(ClinicaDbContext))]
-    [Migration("20231002223648_prontuarioAdicionada")]
-    partial class prontuarioAdicionada
+    [Migration("20231004224419_FixedRelationship")]
+    partial class FixedRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,13 +26,14 @@ namespace ClinicaAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DataHora")
+                    b.Property<DateTime?>("DataHora")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdMedico")
+                    b.Property<int>("MedicoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IdPaciente")
+                    b.Property<int>("PacienteId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Razao")
@@ -40,6 +41,10 @@ namespace ClinicaAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
 
                     b.ToTable("Consulta");
                 });
@@ -50,7 +55,8 @@ namespace ClinicaAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Data")
+                    b.Property<DateTime?>("Data")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
@@ -66,12 +72,14 @@ namespace ClinicaAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PacienteId");
+
                     b.ToTable("Exame");
                 });
 
             modelBuilder.Entity("ClinicaAPI.Models.Medico", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -90,7 +98,7 @@ namespace ClinicaAPI.Migrations
 
             modelBuilder.Entity("ClinicaAPI.Models.Paciente", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -98,7 +106,7 @@ namespace ClinicaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -113,14 +121,16 @@ namespace ClinicaAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DataCriacao")
+                    b.Property<DateTime?>("DataCriacao")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Diagnostico")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PacienteId")
+                    b.Property<int?>("PacienteId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Tratamento")
@@ -128,6 +138,8 @@ namespace ClinicaAPI.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PacienteId");
 
                     b.ToTable("Prontuario");
                 });
@@ -138,7 +150,8 @@ namespace ClinicaAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DataEmissao")
+                    b.Property<DateTime?>("DataEmissao")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Dosagem")
@@ -156,9 +169,66 @@ namespace ClinicaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("MedicoId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("MedicoId");
+
                     b.ToTable("Receita");
+                });
+
+            modelBuilder.Entity("ClinicaAPI.Models.Consulta", b =>
+                {
+                    b.HasOne("ClinicaAPI.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicaAPI.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("ClinicaAPI.Models.Exame", b =>
+                {
+                    b.HasOne("ClinicaAPI.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("ClinicaAPI.Models.Prontuario", b =>
+                {
+                    b.HasOne("ClinicaAPI.Models.Paciente", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("ClinicaAPI.Models.Receita", b =>
+                {
+                    b.HasOne("ClinicaAPI.Models.Medico", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medico");
                 });
 #pragma warning restore 612, 618
         }

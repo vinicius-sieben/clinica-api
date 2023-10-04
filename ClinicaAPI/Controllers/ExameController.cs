@@ -2,6 +2,7 @@ using ClinicaAPI.Data;
 using ClinicaAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Formats.Tar;
 
 namespace ClinicaAPI.Controllers
 {
@@ -22,7 +23,10 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult<IEnumerable<Exame>>> Listar()
         {
             if (_context is null) return NotFound();
-            return await _context.Exame.ToListAsync();
+
+            var exames = await _context.Exame.Include(exame => exame.PacienteId).ToListAsync();
+
+            return Ok(exames);
         }
 
         // Cadastrando um exame
@@ -31,6 +35,12 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult> Cadastrar(Exame exame)
         {
             if (_context is null) return NotFound();
+
+            var existingPaciente = await _context.Paciente.FindAsync(exame.PacienteId);
+
+            if (existingPaciente is null) return BadRequest("Paciente não encontrado.");
+            exame.Paciente = existingPaciente;
+
             await _context.AddAsync(exame);
             await _context.SaveChangesAsync();
             return Created("", exame);

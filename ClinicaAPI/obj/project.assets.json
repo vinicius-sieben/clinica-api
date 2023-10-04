@@ -6037,24 +6037,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\macha\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Vinicius\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\macha\\OneDrive\\Documentos\\ClinicaApi\\clinica-api\\ClinicaAPI\\ClinicaAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Vinicius\\Desktop\\Estudos\\api-clinica\\ClinicaAPI\\ClinicaAPI.csproj",
       "projectName": "ClinicaAPI",
-      "projectPath": "c:\\Users\\macha\\OneDrive\\Documentos\\ClinicaApi\\clinica-api\\ClinicaAPI\\ClinicaAPI.csproj",
-      "packagesPath": "C:\\Users\\macha\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\macha\\OneDrive\\Documentos\\ClinicaApi\\clinica-api\\ClinicaAPI\\obj\\",
+      "projectPath": "C:\\Users\\Vinicius\\Desktop\\Estudos\\api-clinica\\ClinicaAPI\\ClinicaAPI.csproj",
+      "packagesPath": "C:\\Users\\Vinicius\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Vinicius\\Desktop\\Estudos\\api-clinica\\ClinicaAPI\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\macha\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Vinicius\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -6132,7 +6127,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
