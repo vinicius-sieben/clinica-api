@@ -50,9 +50,10 @@ namespace ClinicaAPI.Controllers
         public async Task<ActionResult<Receita>> Buscar([FromRoute] int id)
         {
             if (_context is null) return NotFound();
+
             var receita = await _context.Receita.FindAsync(id);
             if (receita is null) return NotFound();
-            return receita;
+            return Ok(receita);
         }
 
         // Alterando receita
@@ -61,20 +62,11 @@ namespace ClinicaAPI.Controllers
         public async Task<IActionResult> Alterar(Receita receita)
         {
             if (_context is null) return NotFound();
-            _context.Receita.Update(receita);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
 
-        // Alterando médico da receita
-        [HttpPatch()]
-        [Route("mudarmedico/{id}")]
-        public async Task<ActionResult> MudarMedico([FromRoute] int id, int idMedico) 
-        {
-            if (_context is null) return NotFound();
-            var objReceita = await _context.Receita.FindAsync(id);
-            if (objReceita is null) return NotFound();
-            objReceita.IdMedico = idMedico;
+            var tempReceita = await _context.Receita.FindAsync(receita.Id);
+            if (tempReceita is null) return BadRequest("Receita não encontrada.");
+
+            _context.Receita.Update(receita);
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -82,14 +74,14 @@ namespace ClinicaAPI.Controllers
         // Alterando dosagem
         [HttpPatch()]
         [Route("mudardosagem/{id}")]
-        public async Task<ActionResult> MudarDosagem([FromRoute] int id, string dosagem) 
+        public async Task<ActionResult> MudarDosagem([FromRoute] int id, string dosagem)
         {
             if (_context is null) return NotFound();
             var objDosagem = await _context.Receita.FindAsync(id);
             if (objDosagem is null) return NotFound();
             objDosagem.Dosagem = dosagem;
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok("Data da receita alterada com sucesso.");
         }
 
         // Alterando data da receita
@@ -105,17 +97,17 @@ namespace ClinicaAPI.Controllers
             return Ok();
         }
 
-        // Excluindo uma receita
+        // Excluindo uma consulta
         [HttpDelete]
         [Route("excluir/{id}")]
         public async Task<ActionResult> Excluir([FromRoute] int id)
         {
             if (_context is null) return NotFound();
             var objReceita = await _context.Receita.FindAsync(id);
-            if (objReceita is null) return NotFound();
+            if (objReceita is null) return BadRequest("Receita não encontrada.");
             _context.Receita.Remove(objReceita);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok("Consulta excluída com sucesso.");
         }
     }
 }
