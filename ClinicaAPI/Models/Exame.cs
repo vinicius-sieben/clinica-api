@@ -11,7 +11,7 @@ namespace ClinicaAPI.Models
     [Required]
     public string? Nome { get; set; }
     [Required]
-    public DateTime? Data { get; set; }
+    public DateTime Data { get; set; }
     [Required]
     public string? Resultado { get; set; }
     [Required]

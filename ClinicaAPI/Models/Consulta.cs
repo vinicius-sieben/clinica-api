@@ -18,7 +18,7 @@ namespace ClinicaAPI.Models
         [Required]
         public string? Razao { get; set; }
         [Required]
-        public DateTime? DataHora { get; set; }
+        public DateTime DataHora { get; set; }
     }
 
 }

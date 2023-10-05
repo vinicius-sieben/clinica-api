@@ -1,5 +1,6 @@
 using ClinicaAPI.Data;
 using ClinicaAPI.Models;
+using ClinicaAPI.Negocios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Formats.Tar;
@@ -24,12 +25,12 @@ namespace ClinicaAPI.Controllers
         {
             if (_context is null) return NotFound();
 
-            var exames = await _context.Exame.Include(exame => exame.PacienteId).ToListAsync();
+            var exames = await _context.Exame.Include(exame => exame.Paciente).ToListAsync();
 
             return Ok(exames);
         }
 
-        // Cadastrando um exame
+        // Cadastrando um exame novo
         [HttpPost()]
         [Route("cadastrar")]
         public async Task<ActionResult> Cadastrar(Exame exame)
@@ -40,12 +41,13 @@ namespace ClinicaAPI.Controllers
 
             if (existingPaciente is null) return BadRequest("Paciente não encontrado.");
             exame.Paciente = existingPaciente;
-
+            exame.Data = Fusohorario.Corrigir(exame.Data);
             await _context.AddAsync(exame);
             await _context.SaveChangesAsync();
             return Created("", exame);
         }
 
+        // Buscando um exame pelo id
         [HttpGet()]
         [Route("buscar/{id}")]
         public async Task<ActionResult<Exame>> Buscar([FromRoute] int id)
@@ -62,6 +64,7 @@ namespace ClinicaAPI.Controllers
         public async Task<IActionResult> Alterar(Exame exame)
         {
             if (_context is null) return NotFound();
+            if (await _context.Exame.FindAsync(exame.Id) is null) return BadRequest("Exame não encontrado.");
             _context.Exame.Update(exame);
             await _context.SaveChangesAsync();
             return Ok();
@@ -70,7 +73,7 @@ namespace ClinicaAPI.Controllers
         // Alterando nome do exame
         [HttpPatch()]
         [Route("mudarnome/{id}")]
-        public async Task<ActionResult> MudarNome([FromRoute] int id, string nome) 
+        public async Task<ActionResult> MudarNome([FromRoute] int id, string nome)
         {
             if (_context is null) return NotFound();
             var objExame = await _context.Exame.FindAsync(id);
@@ -83,7 +86,7 @@ namespace ClinicaAPI.Controllers
         // Alterando resultado
         [HttpPatch()]
         [Route("mudarresultado/{id}")]
-        public async Task<ActionResult> MudarResultado([FromRoute] int id, string resultado) 
+        public async Task<ActionResult> MudarResultado([FromRoute] int id, string resultado)
         {
             if (_context is null) return NotFound();
             var objExame = await _context.Exame.FindAsync(id);

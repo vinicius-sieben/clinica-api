@@ -73,23 +73,6 @@ namespace ClinicaAPI.Controllers
             return Ok("Consulta alterada com sucesso.");
         }
 
-        // Alterando médico da consulta
-        [HttpPatch()]
-        [Route("mudarmedico/{id}")]
-        public async Task<ActionResult> MudarMedico([FromRoute] int id, Medico medico) 
-        {
-            if (_context is null) return NotFound();
-            var objConsulta = await _context.Consulta.FindAsync(id);
-            if (objConsulta is null) return NotFound();
-
-            var tempMedico = await _context.Medico.FindAsync(medico.Id);
-            if (tempMedico is null) return BadRequest("Médico não encontrado.");
-
-            objConsulta.Medico = medico;
-            await _context.SaveChangesAsync();
-            return Ok("Médico responsável pela consulta alterado com sucesso.");
-        }
-
         // Alterando data da consulta
         [HttpPatch()]
         [Route("mudardata/{id}")]
